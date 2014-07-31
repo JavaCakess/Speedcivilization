@@ -2,7 +2,6 @@ package org.fountanio.world;
 
 import org.fountanio.ent.Entity;
 import org.fountanio.juancode.eng.Engine;
-import org.fountanio.juancode.eng.SpriteSheet;
 import org.fountanio.juancode.out.Main;
 
 public class Tile extends Entity {

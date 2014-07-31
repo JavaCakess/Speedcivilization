@@ -29,7 +29,7 @@ public class Main {
 	
 	public static void main(String[] args) {
 		try {
-			Display.setTitle("Project Wurld");
+			Display.setTitle("Speed Civilization");
 			Display.setDisplayMode(new DisplayMode(970, 610));
 			Display.create();
 			AL.create();
@@ -52,7 +52,6 @@ public class Main {
 		Texture logo = Engine.get("res/fountanio_logo.png");
 		Sound intro_sound = new Sound("res/intro_sound.wav");
 		int ticks = 0;
-		console =  new Console(10, 12, 300, 400);
 		// loop
 		while (!Display.isCloseRequested()) {
 			glClear(GL_COLOR_BUFFER_BIT);
@@ -70,12 +69,8 @@ public class Main {
 				} else if (state == State.MAIN_MENU) {
 					Engine.setUnicodeFont(new java.awt.Font("Times New Roman", java.awt.Font.PLAIN, 64));
 					Engine.say("Find IP:", 10, Display.getHeight() / 3, Color.white);
-					// TODO: create TextInputUI class
 				}
 				
-				
-				// console
-				console.render();console.update();
 				
 			glPopMatrix();
 			
