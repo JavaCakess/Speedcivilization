@@ -31,35 +31,35 @@ public class Main {
 	public static boolean playing = false;
 	
 	public static void main(String[] args) {
-		try {
-			Display.setTitle("Speed Civilization");
-			Display.setDisplayMode(new DisplayMode(970, 610));
-			Display.create();
-			AL.create();
-			console.println("Display And AL created...");
-		} catch (LWJGLException e) {
-			e.printStackTrace();
-			Display.destroy();
-			AL.destroy();
-			System.exit(1);
-		}
 		
-		glMatrixMode(GL_PROJECTION);
-		glLoadIdentity();
-		glOrtho(0, Display.getWidth(), Display.getHeight(), 0, -1, 1);
-		glMatrixMode(GL_MODELVIEW);
-		glDisable(GL_DEPTH_TEST);
-		console.println("OpenGL enabled...");
-		
-		// define
-		tiles_sheet = new SpriteSheet("res/tiles.png", (512 / 32), 32, 32);
-		items_sheet = new SpriteSheet("res/items_sheet.png", (4096/ 32), 32, 32);
-		Texture logo = Engine.get("res/fountanio_logo.png");
-		Sound intro_sound = new Sound("res/intro_sound.wav");
-		int ticks = 0;
-		
-		console.println("Initializing Loop...");
 		if (playing) {
+			try {
+				Display.setTitle("Speed Civilization");
+				Display.setDisplayMode(new DisplayMode(970, 610));
+				Display.create();
+				AL.create();
+				console.println("Display And AL created...");
+			} catch (LWJGLException e) {
+				e.printStackTrace();
+				Display.destroy();
+				AL.destroy();
+				System.exit(1);
+			}
+			
+			glMatrixMode(GL_PROJECTION);
+			glLoadIdentity();
+			glOrtho(0, Display.getWidth(), Display.getHeight(), 0, -1, 1);
+			glMatrixMode(GL_MODELVIEW);
+			glDisable(GL_DEPTH_TEST);
+			console.println("OpenGL enabled...");
+			// define
+			tiles_sheet = new SpriteSheet("res/tiles.png", (512 / 32), 32, 32);
+			items_sheet = new SpriteSheet("res/items_sheet.png", (4096/ 32), 32, 32);
+			Texture logo = Engine.get("res/fountanio_logo.png");
+			Sound intro_sound = new Sound("res/intro_sound.wav");
+			int ticks = 0;
+			
+			console.println("Initializing Loop...");
 			// loop
 			while (!Display.isCloseRequested()) {
 				glClear(GL_COLOR_BUFFER_BIT);
@@ -97,21 +97,23 @@ public class Main {
 			Engine.release(intro_sound);
 			System.exit(0);
 		} else {
-			// TODO: show window to find a ip to play against
+			// TODO: show window to find an IP to play against
+			IPWindow win = new IPWindow();
+			
 		}
+		
 	}
 	
-	static String parsed[];
 	
 	static void consoleInLogic() {
-		parsed = console.getInput().split(" ");
+		String[] parsed = console.getInput().split(" ");
 		if (parsed.length == 1) { // 2 items
 			if (parsed[0].equalsIgnoreCase("state")) {
-				if (parsed[1].equalsIgnoreCase(State.GAME.toString())) {
+				if (parsed[1].equalsIgnoreCase(State.GAME.name())) {
 					state = State.GAME;
-				} else if (parsed[1].equalsIgnoreCase(State.INTRO.toString())) {
+				} else if (parsed[1].equalsIgnoreCase(State.INTRO.name())) {
 					state = State.INTRO;
-				} else if (parsed[1].equalsIgnoreCase(State.MAIN_MENU.toString())) {
+				} else if (parsed[1].equalsIgnoreCase(State.MAIN_MENU.name())) {
 					state = State.MAIN_MENU;
 				}
 			}
