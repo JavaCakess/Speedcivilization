@@ -26,12 +26,15 @@ public class Engine {
 	            fnt.addGlyphs(400, 600);
 	            fnt.getEffects().add(new ColorEffect());
 	            fnt.loadGlyphs();
-
 	        } catch (SlickException eee) {
 	            eee.printStackTrace();
 	            Display.destroy(); AL.destroy();
 	            System.exit(1);
 	        }
+	}
+	
+	public static void destroyUnicodeFont() {
+		fnt.destroy();
 	}
 	
 	@SuppressWarnings("unchecked")

@@ -28,6 +28,7 @@ public class Main {
 	public static float ty = 0;
 	public static Console console = new Console();
 	public static final java.awt.Font font = new java.awt.Font(java.awt.Font.MONOSPACED, java.awt.Font.PLAIN, 64);
+	public static boolean playing = false;
 	
 	public static void main(String[] args) {
 		try {
@@ -58,42 +59,46 @@ public class Main {
 		int ticks = 0;
 		
 		console.println("Initializing Loop...");
-		// loop
-		while (!Display.isCloseRequested()) {
-			glClear(GL_COLOR_BUFFER_BIT);
-			glTranslatef(tx, ty, 0);
-			
-			glPushMatrix();
-				if (state == State.INTRO) {
-					ticks++;
-					introChunk();
-					Engine.draw(logo, Display.getWidth() / 5 - 50, Display.getHeight() / 7, 700, 600);
-					if (ticks == 60) {
-						Engine.play(intro_sound);
-						state = State.MAIN_MENU; ticks = 0; 
-					}
-				} else if (state == State.MAIN_MENU) {
-					Engine.setUnicodeFont(new java.awt.Font("Times New Roman", java.awt.Font.PLAIN, 64));
-					Engine.say("Find IP:", 10, Display.getHeight() / 3, Color.white);
-				}
+		if (playing) {
+			// loop
+			while (!Display.isCloseRequested()) {
+				glClear(GL_COLOR_BUFFER_BIT);
+				glTranslatef(tx, ty, 0);
 				
-				while (Keyboard.next()) {
-					if (Keyboard.isKeyDown(Keyboard.KEY_GRAVE)) { // grave = `
-						console.setVisible(true);
+				glPushMatrix();
+					if (state == State.INTRO) {
+						ticks++;
+						introChunk();
+						Engine.draw(logo, Display.getWidth() / 5 - 50, Display.getHeight() / 7, 700, 600);
+						if (ticks == 60) {
+							Engine.play(intro_sound);
+							state = State.MAIN_MENU; ticks = 0; 
+						}
+					} else if (state == State.MAIN_MENU) {
+						Engine.setUnicodeFont(new java.awt.Font("Times New Roman", java.awt.Font.PLAIN, 64));
+						Engine.say("Find IP:", 10, Display.getHeight() / 3, Color.white);
 					}
-				}
-				// console logic
-				consoleInLogic();
-			glPopMatrix();
-			
-			Display.update();
-			Display.sync(60);
+					
+					while (Keyboard.next()) {
+						if (Keyboard.isKeyDown(Keyboard.KEY_GRAVE)) { // grave = `
+							console.setVisible(true);
+						}
+					}
+					// console logic
+					consoleInLogic();
+				glPopMatrix();
+				
+				Display.update();
+				Display.sync(60);
+			}
+			Display.destroy();
+			AL.destroy();
+			/* release */
+			Engine.release(intro_sound);
+			System.exit(0);
+		} else {
+			// TODO: show window to find a ip to play against
 		}
-		Display.destroy();
-		AL.destroy();
-		/* release */
-		Engine.release(intro_sound);
-		System.exit(0);
 	}
 	
 	static String parsed[];
