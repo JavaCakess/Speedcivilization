@@ -143,4 +143,9 @@ public class Main {
 	public static SpriteSheet getTiles(){
 		return items_sheet;
 	}
+	
+	//cons
+	public static Console getConsole() {
+		return console;
+	}
 }
