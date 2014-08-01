@@ -25,7 +25,7 @@ public class Console extends JFrame {
 		add(sp, BorderLayout.CENTER);
 		add(input, BorderLayout.SOUTH);
 		setSize(new Dimension(400, 400));
-		
+		output.setWrapStyleWord(true); 
 	}
 	/** Allow insertion of time before new line **/
 	public void insertTimeBeforeOutput(boolean timeFlag) {
@@ -60,6 +60,15 @@ public class Console extends JFrame {
 			}
 		});
 		return in;
+	}
+	
+	public void errorln(String s) {
+		if (isVisible()) {
+			println(s);
+		} else {
+			setVisible(true);
+			println(s);
+		}
 	}
 	
 }
