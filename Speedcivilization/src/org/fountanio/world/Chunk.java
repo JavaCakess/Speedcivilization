@@ -1,6 +1,9 @@
 package org.fountanio.world;
 
+import java.io.File;
+
 import org.fountanio.ent.Entity;
+import org.fountanio.juancode.out.Main;
 
 public class Chunk extends Entity {
 
@@ -35,5 +38,12 @@ public class Chunk extends Entity {
 		
 	}
 
-	
+	private File map = null;
+	public void read(String path) {
+		map = new File(path);
+		if (map.exists()) {
+			Main.getConsole().println(path + "exists");
+			// read shit
+		} else Main.getConsole().errorln(path + "does not exist!");
+	}
 }
