@@ -6,6 +6,13 @@ import org.fountanio.juancode.out.Main;
 
 public class Tile extends Entity {
 	
+	/*
+	 * $ # -> dirt
+$ % -> grass
+$ @ -> water
+$ + -> stone
+$ ! -> lava
+	 */
 	private boolean collidable;
 	private boolean active;
 	private int id;

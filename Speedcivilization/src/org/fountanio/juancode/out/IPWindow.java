@@ -20,6 +20,7 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
+import javax.swing.border.EtchedBorder;
 
 import org.fountanio.juancode.eng.Engine;
 
@@ -31,6 +32,7 @@ public class IPWindow extends JFrame {
 	private Border topborder = BorderFactory.createTitledBorder("Connect");
 	private Border bottomborder = BorderFactory.createTitledBorder("Friends");
 	private JTextField ipinput = new JTextField();
+	@SuppressWarnings("unchecked")
 	private JList<String> friendlist = new JList(); 
 	
 	public IPWindow() { 
@@ -39,7 +41,7 @@ public class IPWindow extends JFrame {
 		setLayout(new BorderLayout());
 		if (!Main.playing) {
 			ipinput.setBorder(topborder);
-			gotoip.setBorder(topborder);
+			gotoip.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
 			gotoipf.setBorder(bottomborder);
 			friendlist.setBorder(bottomborder);
 			
