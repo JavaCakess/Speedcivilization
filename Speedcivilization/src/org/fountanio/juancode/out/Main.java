@@ -4,15 +4,11 @@ import static org.lwjgl.opengl.GL11.*;
 
 import java.io.File;
 import java.util.Random;
-import java.util.StringTokenizer;
-
-import javax.swing.JFrame;
 
 import org.fountanio.juancode.eng.Engine;
 import org.fountanio.juancode.eng.Sound;
 import org.fountanio.juancode.eng.SpriteSheet;
 import org.fountanio.world.Tile;
-import org.fountanio.world.World;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.openal.AL;
@@ -31,9 +27,10 @@ public class Main {
 	public static float ty = 0;
 	public static Console console = new Console();
 	public static final java.awt.Font font = new java.awt.Font(java.awt.Font.MONOSPACED, java.awt.Font.PLAIN, 64);
-	public static boolean playing = false;
+	public static boolean playing = false; // debug for now
 	
 	public static void main(String[] args) {
+
 		console.println("Checking if Data dir exists...");
 		File file = new File(Engine.getAppDataDir() + "/sc");
 		if ( file.exists() ) {
@@ -42,10 +39,11 @@ public class Main {
 			console.println("Data dir does NOT exist\nCreating new dir...");
 			Engine.makeFolder(Engine.getAppDataDir(), "/sc");
 			console.println("Done!");
-		}
+		} 
 		IPWindow win = new IPWindow();
-		console.println("IPWindow created...");
-		if (playing) {
+		console.println("IPWindow created...");	
+		// playing
+		if (playing) { console.println("playing = true");
 			try {
 				Display.setTitle("Speed Civilization");
 				Display.setDisplayMode(new DisplayMode(970, 610));
