@@ -2,8 +2,11 @@ package org.fountanio.juancode.out;
 
 import static org.lwjgl.opengl.GL11.*;
 
+import java.io.File;
 import java.util.Random;
 import java.util.StringTokenizer;
+
+import javax.swing.JFrame;
 
 import org.fountanio.juancode.eng.Engine;
 import org.fountanio.juancode.eng.Sound;
@@ -31,7 +34,17 @@ public class Main {
 	public static boolean playing = false;
 	
 	public static void main(String[] args) {
-		
+		console.println("Checking if Data dir exists...");
+		File file = new File(Engine.getAppDataDir() + "/sc");
+		if ( file.exists() ) {
+			console.println("Data dir exists...");
+		} else {
+			console.println("Data dir does NOT exist\nCreating new dir...");
+			Engine.makeFolder(Engine.getAppDataDir(), "/sc");
+			console.println("Done!");
+		}
+		IPWindow win = new IPWindow();
+		console.println("IPWindow created...");
 		if (playing) {
 			try {
 				Display.setTitle("Speed Civilization");
@@ -52,6 +65,7 @@ public class Main {
 			glMatrixMode(GL_MODELVIEW);
 			glDisable(GL_DEPTH_TEST);
 			console.println("OpenGL enabled...");
+			
 			// define
 			tiles_sheet = new SpriteSheet("res/tiles.png", (512 / 32), 32, 32);
 			items_sheet = new SpriteSheet("res/items_sheet.png", (4096/ 32), 32, 32);
@@ -78,7 +92,6 @@ public class Main {
 						Engine.setUnicodeFont(new java.awt.Font("Times New Roman", java.awt.Font.PLAIN, 64));
 						Engine.say("Find IP:", 10, Display.getHeight() / 3, Color.white);
 					}
-					
 					while (Keyboard.next()) {
 						if (Keyboard.isKeyDown(Keyboard.KEY_GRAVE)) { // grave = `
 							console.setVisible(true);
@@ -96,11 +109,7 @@ public class Main {
 			/* release */
 			Engine.release(intro_sound);
 			System.exit(0);
-		} else {
-			// TODO: show window to find an IP to play against
-			IPWindow win = new IPWindow();
-			
-		}
+		} 
 		
 	}
 	
@@ -109,12 +118,15 @@ public class Main {
 		String[] parsed = console.getInput().split(" ");
 		if (parsed.length == 1) { // 2 items
 			if (parsed[0].equalsIgnoreCase("state")) {
-				if (parsed[1].equalsIgnoreCase(State.GAME.name())) {
-					state = State.GAME;
-				} else if (parsed[1].equalsIgnoreCase(State.INTRO.name())) {
+				if (parsed[1].equalsIgnoreCase("intro")) {
 					state = State.INTRO;
-				} else if (parsed[1].equalsIgnoreCase(State.MAIN_MENU.name())) {
+				} else if (parsed[1].equalsIgnoreCase("main")) {
 					state = State.MAIN_MENU;
+				} else if (parsed[1].equalsIgnoreCase("game")) {
+					state = State.GAME;
+				} else {
+					console.println("> " + parsed[1]);
+					console.println("Did not understand command!"); 
 				}
 			}
 		}

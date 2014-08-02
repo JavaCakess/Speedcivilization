@@ -33,14 +33,17 @@ public class Console extends JFrame {
 	}
 	
 	public void println(String t) {
-		if (timeFlag) 
+		if (timeFlag) { 
 			output.append("\n" + Calendar.getInstance().getTime() + "> " + t); 
-		else
+		} else {
 			output.append("\n" + t);
+		}
+		t = null; // stop the printing
 	}
 	
 	public void print(String t) {
 		output.append(t);
+		t = null; // stop the printing
 	}
 	
 	public void clear() {
@@ -69,6 +72,7 @@ public class Console extends JFrame {
 			setVisible(true);
 			println(s);
 		}
+		s = null;
 	}
 	
 }
