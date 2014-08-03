@@ -1,36 +1,29 @@
 package org.fountanio.world;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.Reader;
+import java.util.ArrayList;
 
 import org.fountanio.ent.Entity;
+import org.fountanio.world.Tile;
 import org.fountanio.juancode.out.Main;
 
 public class Chunk extends Entity {
 
-	private Tile[] tiles = {
-			null, null, null, null,
-			null, null, null, null,
-			null, null, null, null,
-			null, null, null, null
-	};
+	
 	
 	public Chunk(int x, int y, int w, int h) {
 		super(x, y, w, h);
 	}
 
-	public void setChunk(Tile[] tiles) {
-		this.tiles = tiles;
-	}
 	
+	private ArrayList<Tile> tiles = new ArrayList<Tile>();
 	@Override
 	public void render() {
-		for (int i = 0; i < tiles.length; i ++) {
-			if (i > 0 || i < 4 || i > 4 || i < 8 || i > 8 || i < 12 || i > 12) {
-				
-			} else {
-				
-			}
-		}
+		
 	}
 
 	@Override
@@ -39,11 +32,29 @@ public class Chunk extends Entity {
 	}
 
 	private File map = null;
+	private ArrayList<Integer> chunk = new ArrayList<Integer>();	
 	public void read(String path) {
 		map = new File(path);
 		if (map.exists()) {
 			Main.getConsole().println(path + "exists");
 			// read shit
+			try {
+				
+				String in = "";
+				Reader r = new FileReader(map);
+				BufferedReader reader = new BufferedReader(r);
+				while (reader.ready()) {
+					in += reader.readLine();
+				}
+				String[] parse = in.trim().split(",");
+				for (int i = 0; i < parse.length; i ++) {
+					chunk.add(Integer.parseInt(parse[i]));
+				}
+				r.close();
+				reader.close();
+			} catch (IOException e) {
+				Main.getConsole().errorln(e.getStackTrace() + "\n" + e.getMessage());
+			}
 		} else Main.getConsole().errorln(path + "does not exist!");
 	}
 }
