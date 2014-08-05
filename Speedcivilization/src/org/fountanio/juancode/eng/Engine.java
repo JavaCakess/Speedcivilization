@@ -31,8 +31,8 @@ public class Engine {
 	            Display.destroy(); AL.destroy();
 	            System.exit(1);
 	        }
-	}
-	
+	} 
+	@Deprecated()
 	public static void destroyUnicodeFont() {
 		fnt.destroy();
 	}

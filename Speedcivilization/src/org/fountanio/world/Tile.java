@@ -6,13 +6,7 @@ import org.fountanio.juancode.out.Main;
 
 public class Tile extends Entity {
 	
-	/*
-	 * $ # -> dirt
-$ % -> grass
-$ @ -> water
-$ + -> stone
-$ ! -> lava
-	 */
+	
 	private boolean collidable;
 	private boolean active;
 	private int id;
@@ -24,6 +18,7 @@ $ ! -> lava
 		this.id = id;
 	}
 	
+	public static final String []tileNames = {"water", "grass", "stone", "dirt", "lava", "brick", "invalid"};
 	public static final int AMOUNT_OF_TILES = 6; // TODO: change when new tile is invented 
 	public static final int WATER = 0; 
 	public static final int GRASS = 1;
@@ -32,7 +27,6 @@ $ ! -> lava
 	public static final int LAVA = 4;
 	public static final int BRICK = 5;
 	public static final int INVALID = 6;
-
 	@Override
 	public void render() {
 		switch (id) {
@@ -58,7 +52,7 @@ $ ! -> lava
 			Engine.draw(Main.getItem(), INVALID, 0, x, y, w, h);
 			break;
 			default:
-				Engine.draw(Main.getItem(), BRICK + 1, 0, x, y, w, h);
+				Engine.draw(Main.getItem(), INVALID, 0, x, y, w, h);
 				break;
 		}
 	}
