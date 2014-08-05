@@ -12,7 +12,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 public class Console extends JFrame {
-
+	private static final long serialVersionUID = 1L;
 	private JTextArea output = new JTextArea("Speed Civilization Console\n");
 	private JScrollPane sp = new JScrollPane(output);
 	private JTextField input = new JTextField();
@@ -22,6 +22,7 @@ public class Console extends JFrame {
 		super("SpeedCivilization Console");
 		output.setEditable(false);
 		setLayout(new BorderLayout()); // no gaps needed
+		sp.setAutoscrolls(true);
 		add(sp, BorderLayout.CENTER);
 		add(input, BorderLayout.SOUTH);
 		setSize(new Dimension(400, 400));
@@ -42,7 +43,7 @@ public class Console extends JFrame {
 	}
 	
 	public void print(String t) {
-		output.append(t);
+		println("ERROR: " + t);
 		t = null; // stop the printing
 	}
 	
@@ -51,7 +52,7 @@ public class Console extends JFrame {
 	}
 	
 	public void clearInput() {
-		in = "";
+		in = ""; 
 	}
 	
 	private String in = "Could Not Get Input"; // default
@@ -65,6 +66,10 @@ public class Console extends JFrame {
 		return in;
 	}
 	
+	public void clearField() {
+		input.setText("");
+	}
+	
 	public void errorln(String s) {
 		if (isVisible()) {
 			println(s);
@@ -75,4 +80,14 @@ public class Console extends JFrame {
 		s = null;
 	}
 	
+	public void printHelp(String command_name, String[] sub_commands, String[] sub_cmd_use) {
+		if (sub_commands.length == sub_cmd_use.length) {
+		println("=== " + command_name + " ===");
+		for (int i = 0; i< sub_commands.length; i ++) {
+			println("* " + sub_commands[i] + " - " + sub_cmd_use[i]);
+		}
+		} else {
+			errorln("printHelp(...): sub_commands.length != sub_cmd_use.length!");
+		}
+	}
 }
