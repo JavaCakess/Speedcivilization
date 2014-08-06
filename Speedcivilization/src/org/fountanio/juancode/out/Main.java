@@ -29,18 +29,11 @@ public class Main {
 	public static final java.awt.Font font = new java.awt.Font(java.awt.Font.MONOSPACED, java.awt.Font.PLAIN, 64);
 	public static boolean playing = true; // debug for now
 	private static IPWindow win; private static boolean triangle_show_flag = false;
+	public static boolean dir_exist = false;
 	
 	public static void main(String[] args) {
 
-		console.println("Checking if Data dir exists...");
-		File file = new File(Engine.getAppDataDir() + "/sc");
-		if ( file.exists() ) {
-			console.println("Data dir exists...");
-		} else {
-			console.println("Data dir does NOT exist\nCreating new dir...");
-			Engine.makeFolder(Engine.getAppDataDir(), "/sc");
-			console.println("Done!");
-		} 
+		setupFiles();
 		win = new IPWindow();
 		console.println("IPWindow created...");	
 		// playing
@@ -83,8 +76,8 @@ public class Main {
 						introChunk();
 						Engine.draw(logo, Display.getWidth() / 5 - 50, Display.getHeight() / 7, 700, 600);
 						if (ticks == 60) {
-							Engine.play(intro_sound);
-							state = State.MAIN_MENU; ticks = 0; 
+							Engine.play(intro_sound); console.println("play(intro_sound)");
+							state = State.MAIN_MENU; ticks = 0; console.println("state set to MAIN_MENU");
 						}
 					} else if (state == State.MAIN_MENU) {
 						mainMenu();
@@ -101,6 +94,7 @@ public class Main {
 					if ( triangle_show_flag ) {
 						Engine.beginShapeRendering();
 						glBegin(GL_TRIANGLES);
+						glColor3f(1.0f, 0f, 0f);
 						glVertex2i(400, 0);
 						glVertex2i(800, 600);
 						glVertex2i(0, 600);
@@ -195,8 +189,12 @@ public class Main {
 		console.clearInput(); // reset to prevent repetition
 	}
 	
+	/** main menu stuff */
 	private static void mainMenu() {
-		
+		// background
+		Tile.drawTile(rand_choice, 0, 0, Display.getWidth(), Display.getHeight());
+		// boxes
+		Engine.draw(getObjects(), 0, 1, 10, Display.getHeight() - 400, 300, 400);
 	}
 	
 	// v
@@ -212,13 +210,35 @@ public class Main {
 		
 	}
 	
+	private static File setup_file = new File(Engine.getAppDataDir() + "sc/setup.launch");
+	/** Setup Files that are needed for the game */
+	private static void setupFiles() {
+		File file = new File(Engine.getAppDataDir() + "/sc");
+		if ( !console.printExist(file, "Data dir") ) {
+			Engine.makeFolder(Engine.getAppDataDir(), "/sc");
+			console.println("Done!");
+			dir_exist = true;
+		} 
+		
+		if (dir_exist) {
+			if ( !console.printExist(setup_file, "setup.launch")) {
+				Engine.makeFile(setup_file);
+			} 
+		}
+		
+	}
+	
+	public static File getSetupFile() {
+		return setup_file;
+	}
+	
 	// ss
 	
 	public static SpriteSheet getItem() {
 		return tiles_sheet;
 	}
 	
-	public static SpriteSheet getTiles(){
+	public static SpriteSheet getObjects(){
 		return items_sheet;
 	}
 	

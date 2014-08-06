@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.util.Calendar;
 
 import javax.swing.JFrame;
@@ -88,6 +89,17 @@ public class Console extends JFrame {
 		}
 		} else {
 			errorln("printHelp(...): sub_commands.length != sub_cmd_use.length!");
+		}
+	}
+	
+	public boolean printExist(File file, String nickname) {
+		println("Checking if " + nickname + " exists...");
+		if (file.exists()) {
+			println(nickname + " exists!");
+			return true; 
+		} else {
+			println(nickname + " DOES NOT exist!");
+			return false;
 		}
 	}
 }

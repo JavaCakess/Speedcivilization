@@ -1,6 +1,7 @@
 package org.fountanio.juancode.eng;
 
 import java.io.File;
+import java.io.IOException;
 
 import org.cjaf.microcode.helper.GLHelper;
 import org.lwjgl.openal.AL;
@@ -135,6 +136,17 @@ public class Engine {
             System.exit(1);
         }
     }
+    
+    public static void makeFile(File file) {
+    	try {
+    		file.createNewFile();
+    	} catch (IOException e) {
+    		e.printStackTrace();
+    		Display.destroy();
+    		AL.destroy();
+    		System.exit(1);
+    	}
+    }
 
     public static void release(Sound sound) {
         AL10.alDeleteSources(sound.source());
@@ -182,6 +194,15 @@ public class Engine {
     
     public static void rewind(Sound sound) {
     	AL10.alSourceRewind(sound.source());
+    }
+    
+    public static void renderCircle(int x, int y, int radius) {
+    	glBegin(GL_LINES);
+    	for (int i = 0; i < radius; i ++) {
+    		glVertex2d(x * Math.PI - i, y + i);
+    		glVertex2d(x * Math.PI, y + i);
+    	}
+    	glEnd();
     }
     
 }
