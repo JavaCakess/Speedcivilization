@@ -1,5 +1,7 @@
 package org.fountanio.juancode.eng;
 
+import java.awt.Color;
+import java.awt.Font;
 import java.io.File;
 import java.io.IOException;
 
@@ -13,36 +15,31 @@ import org.newdawn.slick.font.effects.ColorEffect;
 import org.newdawn.slick.opengl.Texture;
 
 import static org.lwjgl.opengl.GL11.*;
-
+/**
+ * 2D Game Engine
+ * @author MicroCode 
+ * @version 1.0 
+ */
 public class Engine {
-
-
-	private static UnicodeFont fnt;
 	
-	public static void setUnicodeFont(java.awt.Font font) {
+	
+	@SuppressWarnings("unchecked")
+	public static void say(String text, float x, float y, Font font, Color color) {
+		glDisable(GL_TEXTURE_2D);
 		 try {
-	            fnt = new UnicodeFont(font);
+	            UnicodeFont fnt = new UnicodeFont(font);
 
 	            fnt.addAsciiGlyphs();
 	            fnt.addGlyphs(400, 600);
-	            fnt.getEffects().add(new ColorEffect());
+	            fnt.getEffects().add(new ColorEffect(color));
 	            fnt.loadGlyphs();
+	            fnt.drawString(x, y, text); 
 	        } catch (SlickException eee) {
 	            eee.printStackTrace();
 	            Display.destroy(); AL.destroy();
 	            System.exit(1);
 	        }
-	} 
-	@Deprecated()
-	public static void destroyUnicodeFont() {
-		fnt.destroy();
-	}
-	
-	@SuppressWarnings("unchecked")
-	public static void say(String text, float x, float y, org.newdawn.slick.Color color) {
-		if (fnt != null)
-        fnt.drawString(x, y, text, color);
-		else throw new NullPointerException("Null UnicodeFont! Call setUnicodeFont(java.awt.Font font) before!"); 
+		 glEnable(GL_TEXTURE_2D);
     }
 	
 	/**

@@ -91,7 +91,7 @@ public class Console extends JFrame {
 			errorln("printHelp(...): sub_commands.length != sub_cmd_use.length!");
 		}
 	}
-	
+	/** prints to the console if file exists, <b>prints the nickname of the file instead of the real name</b> <p> @return true if file exists, false otherwise.**/
 	public boolean printExist(File file, String nickname) {
 		println("Checking if " + nickname + " exists...");
 		if (file.exists()) {

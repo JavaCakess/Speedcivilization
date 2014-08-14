@@ -3,18 +3,21 @@ package org.fountanio.juancode.out;
 import static org.lwjgl.opengl.GL11.*;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Random;
 
 import org.fountanio.juancode.eng.Engine;
 import org.fountanio.juancode.eng.Sound;
 import org.fountanio.juancode.eng.SpriteSheet;
+import org.fountanio.juancode.msg.Button;
+import org.fountanio.juancode.msg.MessageBox;
+import org.fountanio.world.Item;
 import org.fountanio.world.Tile;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.openal.AL;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
-import org.newdawn.slick.Color;
 import org.newdawn.slick.opengl.Texture;
 
 
@@ -32,8 +35,15 @@ public class Main {
 	public static boolean dir_exist = false;
 	
 	public static void main(String[] args) {
-
-		setupFiles();
+		// setup files
+		try {
+			setupFiles();
+			console.println("Reading setup...");
+			Settings.readSetup();
+			console.println("Done");
+		} catch (IOException e1) {
+			console.errorln(e1.getMessage());
+		}
 		win = new IPWindow();
 		console.println("IPWindow created...");	
 		// playing
@@ -53,9 +63,9 @@ public class Main {
 			
 			glMatrixMode(GL_PROJECTION);
 			glLoadIdentity();
-			glOrtho(0, Display.getWidth(), Display.getHeight(), 0, -1, 1);
+			glOrtho(0, Display.getWidth(), Display.getHeight(), 0, -1, 1); // top down
 			glMatrixMode(GL_MODELVIEW);
-			glDisable(GL_DEPTH_TEST);
+			
 			console.println("OpenGL enabled...");
 			// define
 			tiles_sheet = new SpriteSheet("res/tiles.png", (512 / 32), 32, 32);
@@ -96,7 +106,9 @@ public class Main {
 						glBegin(GL_TRIANGLES);
 						glColor3f(1.0f, 0f, 0f);
 						glVertex2i(400, 0);
+						glColor3f(1.0f, 0f, 0f);
 						glVertex2i(800, 600);
+						glColor3f(1.0f, 0f, 0f);
 						glVertex2i(0, 600);
 						glEnd();
 						Engine.endShapeEndering();
@@ -116,15 +128,21 @@ public class Main {
 		if (Display.isCreated()) Display.destroy();
 	}
 	
-	static final String[] major_command_names = {"state", "intro"};
+	static final String[] major_command_names = {"state", "intro", "hide"};
 	static final String[] state_subs = {"intro", "main", "game"}; 
 	static final String[] state_sub_use = {"INTRO state", "MAIN_MENU state", "GAME state"};
-	static final String[] intro_subs = {String.valueOf(Tile.WATER), String.valueOf(Tile.GRASS), String.valueOf(Tile.STONE), String.valueOf(Tile.DIRT)
-		,String.valueOf(Tile.LAVA), String.valueOf(Tile.BRICK)};
-	static final String[] intro_sub_use = {"Water id", "Grass id", "Stone id", "Dirt id", "Lava id", "Brick id"}; // TODO: update when new tile is added to the game
+	static final String[] intro_subs = Tile.tileNames;
+	static final String[] intro_sub_use = Tile.tileNames; // get the amt
+	static final String[] hide_subs = {"ipwindow"};
+	static final String[] hide_subs_use = {"IPWindow"};
 	static void consoleInLogic() {
 		String[] parsed = console.getInput().split(" ");
-		if (parsed.length == 2) { // 2 items
+		for (int i = 0; i < Tile.AMOUNT_OF_TILES; i++) {
+			intro_sub_use[i] = String.valueOf(i);
+		}
+		if (parsed.length == 3) {
+			
+		} else if (parsed.length == 2) { // 2 items
 			if (parsed[0].equalsIgnoreCase("state")) {
 				if (parsed[1].equalsIgnoreCase("intro")) {
 					state = State.INTRO;
@@ -138,29 +156,13 @@ public class Main {
 				} else if (parsed[1].equalsIgnoreCase("help")) {
 					console.printHelp(major_command_names[0], state_subs, state_sub_use);
 				}
-				
-			} else if (parsed[0].equalsIgnoreCase("intro")) {
-				try {
-					if (Integer.parseInt(parsed[1]) > Tile.AMOUNT_OF_TILES) {
-						console.println("Invalid Tile number: " + parsed[1]);
-						console.println("Tile id CANNOT be over " + Tile.AMOUNT_OF_TILES);
-					} else {
-						rand_use = false;
-						rand_choice = Integer.parseInt(parsed[1]);
-						console.println("rand_choice = " + rand_choice + "(" + intro_sub_use[rand_choice] + ")");
-					} 
-				} catch (NumberFormatException e) {
-					console.errorln("Item after \'intro\' is not a number!");
-					console.println("Please use numbers!");
-				}
-				if (parsed[1].equalsIgnoreCase("help")) {
-					console.printHelp(major_command_names[1], intro_subs, intro_sub_use);
-				}
-			} else if (parsed[0].equalsIgnoreCase("hide")) {
+			}  else if (parsed[0].equalsIgnoreCase("hide")) {
 				if (parsed[1].equalsIgnoreCase("ipwindow")) {
 					win.setVisible(false);
 					console.println("IPWindow is now hidden");
 					console.println("You can show it again by typing \"show ipwindow\"");
+				} else if (parsed[1].equalsIgnoreCase("help")) {
+					console.printHelp(major_command_names[2], hide_subs, hide_subs_use); 
 				}
 				
 			} else if (parsed[0].equalsIgnoreCase("show")) {
@@ -168,9 +170,28 @@ public class Main {
 					win.setVisible(true);
 					console.println("IPWindow is now showing");
 					console.println("You can hide it by typing \"hide ipwindow\"");
+				} else if (parsed[1].equalsIgnoreCase("help")) {
+					console.printHelp(major_command_names[2], hide_subs, hide_subs_use); 
+				}
+			}else if (parsed[0].equalsIgnoreCase("intro")) {
+				try {
+					if (Integer.parseInt(parsed[1]) > Tile.AMOUNT_OF_TILES) {
+						console.println("Invalid Tile number: " + parsed[1]);
+						console.println("Tile id CANNOT be over " + Tile.AMOUNT_OF_TILES);
+					} else {
+						rand_use = false;
+					} 
+				} catch (NumberFormatException e) {
+					if (!parsed[1].equalsIgnoreCase("help")) {
+						console.errorln("Item after \'intro\' is not a number!");
+						console.println("Please use numbers!");
+					}
+				}
+				if (parsed[1].equalsIgnoreCase("help")) {
+					console.printHelp(major_command_names[1], intro_subs, intro_sub_use);
 				}
 			}
-			
+
 			else {
 				console.println("> " + parsed[0]);
 				console.println("Did not understand command!"); 
@@ -184,17 +205,43 @@ public class Main {
 			} else if (parsed[0].equalsIgnoreCase("god_all_mighty")) {
 				console.println("God Bless you!");
 				triangle_show_flag = false;
+			} else if (parsed[0].equalsIgnoreCase("first_time")) {
+				console.println("You can tell the game that this is NOT your second time playing with \"played_before\"");
+				Settings.setFirstTimePlaying(true);
+			} else if (parsed[0].equalsIgnoreCase("played_before")) {
+				console.println("You can tell the game that this is your first time playing with \"first_time\"");
+				Settings.setFirstTimePlaying(false);
 			}
 		}
 		console.clearInput(); // reset to prevent repetition
 	}
+	
+	static final MessageBox first_timer_messages = new MessageBox(
+			"hi, i'm don!", "welcome to speed civilization!", 
+			"i will inform you about everything happening at your territory", 
+			"begin playing by clicking the map button."
+			);
+	static final Button main_button = new Button("MAP", Button.DEFAULT_BACKGROUND, 400, 200, 
+			300, 150); 
 	
 	/** main menu stuff */
 	private static void mainMenu() {
 		// background
 		Tile.drawTile(rand_choice, 0, 0, Display.getWidth(), Display.getHeight());
 		// boxes
-		Engine.draw(getObjects(), 0, 1, 10, Display.getHeight() - 400, 300, 400);
+		Item.drawItem(Item.DON, 10, Display.getHeight() - 400, 300, 400); 
+		if (Settings.firstTimePlaying()) {
+			first_timer_messages.activate();
+			if (first_timer_messages.isDone()) {
+				Settings.setFirstTimePlaying(false);
+			}
+		} else {
+			main_button.setFont(main_button.scaleFont(Button.DEFAULT_FONT));
+			main_button.render();
+			if (main_button.isSelected()) {
+				
+			}
+		}
 	}
 	
 	// v
@@ -210,22 +257,28 @@ public class Main {
 		
 	}
 	
-	private static File setup_file = new File(Engine.getAppDataDir() + "sc/setup.launch");
-	/** Setup Files that are needed for the game */
-	private static void setupFiles() {
+	private static File setup_file;
+	/** Setup Files that are needed for the game 
+	 * @throws IOException */
+	private static void setupFiles() throws IOException {
 		File file = new File(Engine.getAppDataDir() + "/sc");
 		if ( !console.printExist(file, "Data dir") ) {
+			console.println("Creating Data dir...");
 			Engine.makeFolder(Engine.getAppDataDir(), "/sc");
 			console.println("Done!");
 			dir_exist = true;
-		} 
-		
-		if (dir_exist) {
-			if ( !console.printExist(setup_file, "setup.launch")) {
-				Engine.makeFile(setup_file);
-			} 
+		} else {
+			dir_exist = true; // important!
 		}
-		
+		if (dir_exist) {
+			setup_file = new File(Engine.getAppDataDir() + "/sc/setup.launch");
+			if ( !console.printExist(setup_file, "setup file") ) {
+				Engine.makeFile(new File(Engine.getAppDataDir() + "/sc/setup.launch")); 
+				console.println("setup.launch created!");
+				console.println("Writing default contents to setup.launch");
+				Settings.writeDefaultSetup();
+			} else console.println("setup.launch exists"); 
+		} 
 	}
 	
 	public static File getSetupFile() {
@@ -234,7 +287,7 @@ public class Main {
 	
 	// ss
 	
-	public static SpriteSheet getItem() {
+	public static SpriteSheet getTiles() {
 		return tiles_sheet;
 	}
 	
