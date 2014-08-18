@@ -75,7 +75,8 @@ public class Tile extends Entity {
 		ticks++;
 		if (id == WATER) {
 			if (ticks == 60) {
-				
+				// Let me guess. Reset ticks?
+				resetTicks();
 			}
 		}
 	}
@@ -92,7 +93,7 @@ public class Tile extends Entity {
 		return ticks;
 	}
 
-	public boolean isActive(){
+	public boolean isActive() {
 		return active;
 	}
 	
