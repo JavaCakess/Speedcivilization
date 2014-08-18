@@ -13,8 +13,8 @@ import org.fountanio.juancode.out.Main;
 public class World  {
 	
 	private Tile[] world;
-	public final int MAX_WIDTH = 120;
-	public final int MAX_HEIGHT = 40;
+	public static final int MAX_WIDTH = 120;
+	public static final int MAX_HEIGHT = 40;
 	private int tick = 0;
 	
 	public void loadWorld(String path) throws IOException {
@@ -37,6 +37,6 @@ public class World  {
 	}
 	
 	public void render() {
-		
+		// lil wot
 	}
 }
