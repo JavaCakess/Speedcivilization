@@ -6,15 +6,12 @@ import org.fountanio.juancode.out.Main;
 
 public class Tile extends Entity {
 	
-	
-	private boolean collidable;
 	private boolean active;
 	private int id;
 
-	public Tile(int id, boolean collidable, boolean active, int x, int y, int w, int h) {
+	public Tile(int id, boolean active, int x, int y, int w, int h) {
 		super(x, y, w, h);
 		this.active = active;
-		this.collidable = collidable;
 		this.id = id;
 	}
 	
@@ -31,38 +28,11 @@ public class Tile extends Entity {
 	public static final int WATER2 		= 8;
 	@Override
 	public void render() {
-		switch (id) {
-		case WATER:
-			Engine.draw(Main.getTiles(), WATER, 0, x, y, w, h);
-			break;
-		case GRASS:
-			Engine.draw(Main.getTiles(), GRASS, 0, x, y, w, h);
-			break;
-		case STONE:
-			Engine.draw(Main.getTiles(), STONE, 0, x, y, w, h);
-			break;
-		case DIRT:
-			Engine.draw(Main.getTiles(), DIRT, 0, x, y, w, h);
-			break;
-		case LAVA:
-			Engine.draw(Main.getTiles(), LAVA, 0, x, y, w, h);
-			break;
-		case BRICK:
-			Engine.draw(Main.getTiles(), BRICK, 0, x, y, w, h);
-			break;
-		case INVALID:
-			Engine.draw(Main.getTiles(), INVALID, 0, x, y, w, h);
-			break;
-		case BURNT_DIRT:
-			Engine.draw(Main.getTiles(), BURNT_DIRT, 0, x, y, w, h);
-			break;
-		case WATER2:
-			Engine.draw(Main.getTiles(), WATER2, 0, x, y, w, h);
-			break;
-			default:
-				Engine.draw(Main.getTiles(), INVALID, 0, x, y, w, h);
-				break;
-		}
+		Tile.drawTile(this.id, x, y, w, h); 
+	}
+	
+	public int getID() {
+		return this.id;
 	}
 	
 	public static final void drawTile(int id, int x, int y, int w, int h) {
@@ -126,7 +96,4 @@ public class Tile extends Entity {
 		return active;
 	}
 	
-	public boolean isCollidable() {
-		return collidable;
-	}
 }

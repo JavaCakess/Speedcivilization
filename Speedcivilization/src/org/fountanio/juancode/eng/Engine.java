@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Font;
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
 
 import org.cjaf.microcode.helper.GLHelper;
 import org.lwjgl.openal.AL;
@@ -154,14 +156,26 @@ public class Engine {
             texture.release();
         }
     }
-    
     /**
-     * Gets the directory in where the program is located
-     * @return user.dir
-     * @since 1.0.1 Beta
+     * Gets a file from your resource folder 
+     * @param res - file name 
+     * @return - File you request, otherwise a NullPointerException
      */
-    public static String getProgramDir() {
-        return System.getProperty("user.dr");
+    public static File getResourceLoc(String res)  {
+    	URL url = ClassLoader.getSystemResource(res);
+    	if (url != null) {
+    		try {
+				return new File(url.toURI());
+			} catch (URISyntaxException e) {
+				e.printStackTrace();
+				Display.destroy();
+				AL.destroy();
+				System.exit(1);
+			}
+    	} else {
+    		throw new NullPointerException("Engine could not find "+res+"!");
+    	}
+    	return null;
     }
     
     /**

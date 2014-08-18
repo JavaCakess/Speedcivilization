@@ -14,8 +14,6 @@ public class Settings {
 	private static String record = "";
 	private static final String[] pre = {"first"};
 	private static String default_contents = "first=true\n";
-	/* FINAL WRITE CONSTANTS */
-	private static boolean final_first = false;
 	
 	public static void readSetup() throws IOException {
 		Reader r = new FileReader(Main.getSetupFile());
@@ -63,6 +61,9 @@ public class Settings {
 	public static void writeFinalSetup() throws IOException {
 		Writer w = new FileWriter(Main.getSetupFile());
 		BufferedWriter writer = new BufferedWriter(w);
+		if (!first_time_playing) {
+			writer.append("first=false");
+		}
 	}
 	
 	public static final boolean firstTimePlaying() {

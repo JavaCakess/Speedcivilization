@@ -14,7 +14,7 @@ public class Item extends Entity {
 
 	@Override
 	public void render() { 
-
+		Item.drawItem(id, x, y, w, h); 
 	}
 
 

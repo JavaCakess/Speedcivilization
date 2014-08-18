@@ -7,7 +7,11 @@ import org.fountanio.juancode.eng.Engine;
 import org.fountanio.world.Item;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
-
+/**
+ * Displays a customizable message box on the bottom of the screen
+ * @author MicroCode
+ *
+ */
 public class MessageBox {
 
 	/** 
@@ -22,16 +26,16 @@ public class MessageBox {
 				Color.black);
 	}
 	
-	private String[] out;
+	protected String[] out;
 	
 	public MessageBox(String... out) {
 		this.out = out;
 	}
 	
-	private int next = 0;
-	private Font font = new Font(Font.MONOSPACED, Font.BOLD, 40);
-	private Color color = Color.black;
-	private boolean done = false;
+	protected int next = 0;
+	protected Font font = new Font(Font.MONOSPACED, Font.BOLD, 40);
+	protected Color color = Color.black;
+	protected boolean done = false;
 	
 	public void activate() {
 		if (next >= out.length) {
@@ -53,9 +57,7 @@ public class MessageBox {
 					Display.getHeight() - (Display.getHeight() / 5) + 100, font, 
 					color); */
 			while (Keyboard.next()) { // should be last
-				if (Keyboard.isKeyDown(Keyboard.KEY_RETURN)) {
-					next++;
-				} 
+				next++; // allow the user to press any key 
 			}
 		} 
 	}

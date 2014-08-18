@@ -63,7 +63,7 @@ public class Main {
 			
 			glMatrixMode(GL_PROJECTION);
 			glLoadIdentity();
-			glOrtho(0, Display.getWidth(), Display.getHeight(), 0, -1, 1); // top down
+			glOrtho(0, Display.getWidth(), Display.getHeight(), 0, 1, -1); 
 			glMatrixMode(GL_MODELVIEW);
 			
 			console.println("OpenGL enabled...");
@@ -80,7 +80,6 @@ public class Main {
 				glClear(GL_COLOR_BUFFER_BIT);
 				glTranslatef(tx, ty, 0);
 				
-				glPushMatrix();
 					if (state == State.INTRO) {
 						ticks++;
 						introChunk();
@@ -91,7 +90,9 @@ public class Main {
 						}
 					} else if (state == State.MAIN_MENU) {
 						mainMenu();
-					}
+					} else if (state == State.GAME) {
+						Game.play();
+					} 
 					while (Keyboard.next()) {
 						if (Keyboard.isKeyDown(Keyboard.KEY_GRAVE)) { // grave = `
 							console.setVisible(true);
@@ -113,13 +114,17 @@ public class Main {
 						glEnd();
 						Engine.endShapeEndering();
 					}
-				glPopMatrix();
 				
 				Display.update();
 				Display.sync(60);
 			}
 			Display.destroy();
 			AL.destroy();
+			try {
+				Settings.writeFinalSetup();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 			/* release */
 			Engine.release(intro_sound);
 			System.exit(0);
@@ -239,7 +244,7 @@ public class Main {
 			main_button.setFont(main_button.scaleFont(Button.DEFAULT_FONT));
 			main_button.render();
 			if (main_button.isSelected()) {
-				
+				state = State.GAME;
 			}
 		}
 	}
